@@ -23,8 +23,8 @@
 //Adafruit_PN532 nfc(PN532_SCK, PN532_MISO, PN532_MOSI, PN532_SS);
 //Adafruit_PN532 nfc( PN532_SS );//D5 chip select
 //I2C
-#define PN532_IRQ (25)//GPIO01
-#define PN532_RST (26)
+#define PN532_IRQ (19)//GPIO01
+#define PN532_RST (18)
 
 const int DELAY_BETWEEN_CARDS = 500;
 long timeLastCardRead = 0;
@@ -115,5 +115,18 @@ void loop() {
   
   return_settings(&SerialBT);
   NFC_loop();  
-  
+  tick_keypad();
+}
+
+void manage_password_check( String try_password){
+  char buffer_password[4];
+  try_password.toCharArray(buffer_password, 4 );
+  if( check_password( buffer_password ) ){
+     open_lock();
+     Serial.write("Open");
+  }else{
+     Serial.write("Wrong password");  
+  }
+  reset_input();
+
 }

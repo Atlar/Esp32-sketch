@@ -18,8 +18,8 @@ char json[] = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302
 void settings_setup()
 {
   
-  doc["password"] = "0000";
-  doc["master_password"] = "0000";
+  doc["password"] = "00000";
+  doc["master_password"] = "00000";
   //const char* password = doc["password"];
   //const char* master_password = doc["master_password"];
   doc["accept_NFC"] = 1;
@@ -37,8 +37,8 @@ void settings_setup()
 void load_settings(){
   // initialize EEPROM with predefined size
   EEPROM.begin(EEPROM_SIZE);
-  char password[4];
-  char master_password[4];
+  char password[5];
+  char master_password[5];
   
   read_string( PASSWORD_ADDRESS,PASSWORD_SIZE, password);
   read_string( MASTER_PASSWORD_ADDRESS, MASTER_PASSWORD_SIZE, master_password);
@@ -70,11 +70,15 @@ void read_string( int address, int size_string, char* string_buffer ){
         number_n += 1;
         
     }
-    
-    Serial.write("read: ");
+    //mark the end of a char array
+    string_buffer[size_string]='\0';
+    Serial.write("read data: ");
+    Serial.write(string_buffer);
+    Serial.write(" read: ");
     char cstr[16];
     itoa(number_n, cstr, 10);
     Serial.write( cstr );
+    
     
 }
 
